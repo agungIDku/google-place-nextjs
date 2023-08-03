@@ -1,19 +1,11 @@
 import { ShopOutlined, HomeOutlined  } from '@ant-design/icons'
 
+import type { PlaceInterface } from '@/redux/reducers/placeMap/type'
+
 import { StyledContainer } from './_Item'
 import useItem from './useItem'
 
-interface ItemInterface {
-  type: 'business' | 'home'
-  name: string
-  address: string
-  coords: {
-    lat: number
-    lng: number
-  }
-}
-
-function Item({ type, name, address, coords }: ItemInterface) {
+function Item({ type, name, address, coords }: PlaceInterface) {
   const { handleClick } = useItem()
   return (
     <StyledContainer onClick={() => handleClick(coords)}>

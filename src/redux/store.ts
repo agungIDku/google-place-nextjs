@@ -5,42 +5,36 @@ import { createEpicMiddleware } from 'redux-observable'
 import { rootEpic } from './epics'
 import rootReducer from './reducers'
 
-let store
+import type { StateType } from './reducers'
 
-const initStore = (initialState) => {
+const initStore = () => {
   const epicMiddleware = createEpicMiddleware()
   const logger = createLogger({ collapsed: true })
   const reduxMiddleware = applyMiddleware(epicMiddleware, logger)
 
-  const composeEnhancers = (typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION__) ? window.__REDUX_DEVTOOLS_EXTENSION__() : f => f
-
-  const store = createStore(rootReducer, initialState, compose(
-    reduxMiddleware,
-    composeEnhancers
+  const store = createStore(rootReducer, compose(
+    reduxMiddleware
   ))
   epicMiddleware.run(rootEpic)
 
   return store
 }
 
-export const initializeStore = (preloadedState) => {
-  let _store = store ?? initStore(preloadedState)
 
-  if (preloadedState && store) {
-    _store = initStore({
-      ...store.getState(),
-      ...preloadedState
-    })
-    store = undefined
+
+export const initializeStore = (preloadedState: StateType) => {
+  let _store = initStore()
+
+  if (preloadedState) {
+    _store = initStore()
   }
 
   if (typeof window === 'undefined') return _store
-  if (!store) store = _store
 
   return _store
 }
 
-export function useStore (initialState) {
+export function useStore (initialState: StateType) {
   const store = useMemo(() => initializeStore(initialState), [initialState])
   return store
 }

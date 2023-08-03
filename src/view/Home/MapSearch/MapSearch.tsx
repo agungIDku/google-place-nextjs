@@ -12,8 +12,8 @@ function MapSearch() {
       <Input size="large" onChange={handleChange} value={searchValue} placeholder="Search place ..." />
       {!!maps.places.length && (
         <StyledResultData>
-          {maps.places?.map((el: any, index: number) => (
-            <Item key={index} name={el.name} type={el.type} address={el.address} coords={el.coords} />
+          {maps.places?.map((el, index: number) => (
+            <Item key={index} {...el}/>
           ))}
         </StyledResultData>
       )}

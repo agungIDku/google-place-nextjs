@@ -1,11 +1,12 @@
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 import { setChoosenPlace } from '@/redux/actions/placeMapAction'
+import type { InitialStateInterface } from '@/redux/reducers/placeMap/type'
 
 function useItem() {
   const dispatch = useDispatch()
 
-  const handleClick = (coordinate) => {
+  const handleClick = (coordinate: InitialStateInterface['choosenPlace']) => {
     dispatch(setChoosenPlace(coordinate))
   }
 

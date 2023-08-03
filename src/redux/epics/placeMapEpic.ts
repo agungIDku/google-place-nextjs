@@ -1,28 +1,26 @@
 import { of } from 'rxjs'
 import { takeUntil, mergeMap, catchError, map } from 'rxjs/operators'
-import { ofType } from 'redux-observable'
+import { ofType, Epic } from 'redux-observable'
 import { ajax } from 'rxjs/ajax'
 
-import * as actions from '../actions/placeMapAction'
-import { FETCH_PLACES } from "../types/placeMapType"
+import type { PlaceInterface } from '../reducers/placeMap/type'
+import { PlaceMapActionType, fetchPlacesSuccess, fetchPlacesFailure } from '../actions/placeMapAction'
 
-export const fetchPlacesEpic = (action$) => {
+export const fetchPlacesEpic: Epic = (action$) => {
   return action$.pipe(
-    ofType(FETCH_PLACES),
+    ofType(PlaceMapActionType.FETCH_PLACES),
     mergeMap(action =>
       ajax.getJSON(`/api/mock?keyword=${action.payload.searchTerm}`).pipe(
-        map(res => actions.fetchPlacesSuccess(res.predictions)),
+        map(res => fetchPlacesSuccess(res as PlaceInterface[])
+      ),
         takeUntil(
           action$.pipe(
-            ofType(FETCH_PLACES)
+            ofType(PlaceMapActionType.FETCH_PLACES)
           )
         ),
-        catchError((error) =>
+        catchError(() =>
           of(
-            actions.fetchPlacesFailure(
-              error,
-              action.payload.isServer
-            )
+            fetchPlacesFailure(true)
           )
         )
       )

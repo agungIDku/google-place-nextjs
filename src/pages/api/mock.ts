@@ -12,9 +12,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     el.name.toLowerCase().includes((keyword as string).toLowerCase())
   )
 
-  res.status(200).json({
-    predictions: dataFilter
-  })
+  res.status(200).json(dataFilter)
 }
 
 
