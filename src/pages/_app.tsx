@@ -1,12 +1,8 @@
-import { ReactNode } from 'react'
 import { Provider } from 'react-redux'
-import PropTypes from 'prop-types'
-import { useStore } from '../redux/store'
-import { StyledEngineProvider } from '@mui/material/styles'
-import CssBaseline from '@mui/material/CssBaseline'
 import { CacheProvider } from '@emotion/react'
+
+import { useStore } from '../redux/store'
 import createEmotionCache from '../utils/emotionCache'
-import '../styles/global.css'
 
 const clientSideEmotionCache = createEmotionCache()
 
@@ -17,17 +13,8 @@ export default function App ({ Component, pageProps, emotionCache }: any) {
   return (
     <Provider store={store}>
       <CacheProvider value={emotionCache}>
-        <StyledEngineProvider injectFirst>
-          <CssBaseline />
-          <Component {...pageProps} />
-        </StyledEngineProvider>
+        <Component {...pageProps} />
       </CacheProvider>
     </Provider>
   )
-}
-
-App.propTypes = {
-  pageProps: PropTypes.object.isRequired,
-  Component: PropTypes.elementType.isRequired,
-  emotionCache: PropTypes.object
 }
